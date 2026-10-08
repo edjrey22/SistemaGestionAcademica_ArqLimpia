@@ -2,14 +2,14 @@ package com.academico.presentation;
 
 import com.academico.domain.model.Curso;
 import com.academico.application.CursoService;
-import com.academico.infrastructure.CursoRepository;
+import com.academico.infrastructure.persistence.CursoRepositoryJson;
 
 import java.util.Scanner;
 
 public class CursoUI {
 
     private static final CursoService service =
-            new CursoService(new CursoRepository());
+            new CursoService(new CursoRepositoryJson());
 
     public static void mostrarMenu(Scanner sc) {
 
