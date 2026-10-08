@@ -9,11 +9,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CursoRepository {
+public class CursoRepository implements com.academico.domain.repository.CursoRepository {
 
     private final String archivo = "data/cursos.json";
     private final Gson gson = new Gson();
 
+    @Override
     public List<Curso> listar() {
 
         try (Reader reader = new FileReader(archivo)) {
@@ -29,6 +30,7 @@ public class CursoRepository {
         }
     }
 
+    @Override
     public void guardar(List<Curso> cursos) {
 
         try (Writer writer = new FileWriter(archivo)) {
