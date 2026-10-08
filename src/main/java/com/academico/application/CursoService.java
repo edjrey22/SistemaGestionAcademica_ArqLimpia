@@ -13,6 +13,10 @@ public class CursoService {
         repository = new com.academico.infrastructure.CursoRepository();
     }
 
+    public CursoService(CursoRepository repository) {
+        this.repository = repository;
+    }
+
     public void registrar(Curso curso) {
 
         List<Curso> cursos = repository.listar();
