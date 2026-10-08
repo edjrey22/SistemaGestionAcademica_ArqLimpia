@@ -1,7 +1,7 @@
 package com.academico.application;
 
 import com.academico.domain.model.Curso;
-import com.academico.infrastructure.CursoRepository;
+import com.academico.domain.repository.CursoRepository;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class CursoService {
     private final CursoRepository repository;
 
     public CursoService() {
-        repository = new CursoRepository();
+        repository = new com.academico.infrastructure.CursoRepository();
     }
 
     public void registrar(Curso curso) {
