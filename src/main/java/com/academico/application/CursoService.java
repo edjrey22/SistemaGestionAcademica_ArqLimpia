@@ -9,10 +9,6 @@ public class CursoService {
 
     private final CursoRepository repository;
 
-    public CursoService() {
-        repository = new com.academico.infrastructure.CursoRepository();
-    }
-
     public CursoService(CursoRepository repository) {
         this.repository = repository;
     }
