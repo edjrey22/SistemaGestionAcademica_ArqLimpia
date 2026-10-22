@@ -33,6 +33,16 @@ public class CursoUI {
             switch (opcion) {
 
                 case 1:
+                    System.out.print("ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Nombre: ");
+                    String nombre = sc.nextLine();
+
+                    System.out.print("Créditos: ");
+                    int creditos = sc.nextInt();
+
                     boolean registrado = service.registrar(
                             new Curso(id, nombre, creditos)
                     );
