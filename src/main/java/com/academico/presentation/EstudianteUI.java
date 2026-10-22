@@ -34,15 +34,20 @@ public class EstudianteUI {
             opcion = sc.nextInt();
             sc.nextLine();
 
-            switch (opcion) {
-                case 1->registrar(sc);
-                case 2->listar();
-                case 3->actualizar(sc);
-                case 4->eliminar (sc);
-                case 0 ->
-                        System.out.println("Regresando...");
-                default ->
-                        System.out.println("Opción no válida.");
+            try {
+                switch (opcion) {
+                    case 1->registrar(sc);
+                    case 2->listar();
+                    case 3->actualizar(sc);
+                    case 4->eliminar (sc);
+                    case 0 ->
+                            System.out.println("Regresando...");
+                    default ->
+                            System.out.println("Opción no válida.");
+                }
+            } catch (IllegalStateException e) {
+                // Errores del adaptador de salida (por ejemplo, la base de datos)
+                System.out.println("Error: " + e.getMessage());
             }
         } while (opcion != 0);
     }

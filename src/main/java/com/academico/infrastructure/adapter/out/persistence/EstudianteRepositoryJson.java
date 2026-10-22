@@ -10,11 +10,19 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //modificacion implements
 public class EstudianteRepositoryJson implements EstudianteRepository {
     private final String archivo="data/estudiantes.json";
     private final Gson gson=new Gson();
+
+@Override
+public void guardar(Estudiante estudiante){
+    List<Estudiante> estudiantes=listar();
+    estudiantes.add(estudiante);
+    escribir(estudiantes);
+}
 
 @Override
 public List <Estudiante> listar(){
@@ -28,7 +36,37 @@ public List <Estudiante> listar(){
 }
 
 @Override
-public void guardar(List<Estudiante> estudiantes){
+public Optional<Estudiante> buscarPorId(int id){
+    return listar().stream()
+            .filter(e-> e.getId()==id)
+            .findFirst();
+}
+
+@Override
+public boolean actualizar(Estudiante estudiante){
+    List<Estudiante> estudiantes=listar();
+    for (Estudiante e: estudiantes){
+        if(e.getId()== estudiante.getId()){
+            e.setNombre(estudiante.getNombre());
+            e.setCorreo(estudiante.getCorreo());
+            escribir(estudiantes);
+            return true;
+        }
+    }
+    return false;
+}
+
+@Override
+public boolean eliminar(int id){
+    List<Estudiante> estudiantes=listar();
+    boolean eliminado= estudiantes.removeIf(e-> e.getId()==id);
+    if(eliminado){
+        escribir(estudiantes);
+    }
+    return eliminado;
+}
+
+private void escribir(List<Estudiante> estudiantes){
     try (Writer writer = new FileWriter(archivo)) {
         gson.toJson(estudiantes,writer);
     }catch (IOException e){

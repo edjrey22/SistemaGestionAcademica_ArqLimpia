@@ -1,5 +1,6 @@
 package com.academico;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryJson;
+import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
 import com.academico.presentation.EstudianteUI;
 import com.academico.presentation.CursoUI;
 //agregar
@@ -16,8 +17,9 @@ public class Main {
 
     public static void main(String[] args) {
         //agregar
-        // infraestructura
-        EstudianteRepository repository=new EstudianteRepositoryJson();
+        // infraestructura: basta cambiar esta línea para elegir el adaptador
+        // EstudianteRepository repository=new EstudianteRepositoryJson();
+        EstudianteRepository repository=new EstudianteRepositoryPostgres();
 
         //aplicacion
         EstudianteUseCase service=new EstudianteService(repository);

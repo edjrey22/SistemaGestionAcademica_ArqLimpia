@@ -1,7 +1,6 @@
 package com.academico.application.service;
 import com.academico.application.port.in.EstudianteUseCase;
 import com.academico.domain.model.Estudiante;
-//import com.academico.infrastructure.persistence.EstudianteRepositoryJson;
 import com.academico.domain.repository.EstudianteRepository;
 
 
@@ -11,21 +10,16 @@ public class EstudianteService implements EstudianteUseCase {
 
     public EstudianteService(EstudianteRepository repository){
         this.repository=repository;
-        //repository = new EstudianteRepositoryJson();
     }
     //Esto se llama inyección de dependencias.
 
 
     @Override
     public boolean registrar (Estudiante estudiante){
-        List<Estudiante> estudiantes = repository.listar();
-        boolean existe = estudiantes.stream()
-                .anyMatch(e -> e.getId() == estudiante.getId());
-        if(existe){
+        if(repository.buscarPorId(estudiante.getId()).isPresent()){
             return false;
         }
-        estudiantes.add(estudiante);
-        repository.guardar(estudiantes);
+        repository.guardar(estudiante);
         return true;
     }
 
@@ -36,26 +30,12 @@ public class EstudianteService implements EstudianteUseCase {
 
     @Override
     public boolean actualizar(Estudiante estudiante){
-        List<Estudiante> estudiantes=repository.listar();
-        for (Estudiante e: estudiantes){
-            if(e.getId()== estudiante.getId()){
-                e.setNombre(estudiante.getNombre());
-                e.setCorreo(estudiante.getCorreo());
-                repository.guardar(estudiantes);
-                return true;
-            }
-        }
-        return false;
+        return repository.actualizar(estudiante);
     }
 
     @Override
     public boolean eliminar (int id){
-        List<Estudiante> estudiantes=repository.listar();
-        boolean eliminado= estudiantes.removeIf(e-> e.getId()==id);
-        if(eliminado){
-            repository.guardar(estudiantes);
-        }
-                return eliminado;
+        return repository.eliminar(id);
     }
 
 }
