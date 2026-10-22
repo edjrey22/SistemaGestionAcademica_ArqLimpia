@@ -1,9 +1,10 @@
 package com.academico;
-import com.academico.infrastructure.persistence.EstudianteRepositoryJson;
+import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryJson;
 import com.academico.presentation.EstudianteUI;
 import com.academico.presentation.CursoUI;
 //agregar
-import com.academico.application.EstudianteService;
+import com.academico.application.port.in.EstudianteUseCase;
+import com.academico.application.service.EstudianteService;
 import com.academico.application.CursoService;
 import com.academico.domain.repository.CursoRepository;
 import com.academico.domain.repository.EstudianteRepository;
@@ -19,7 +20,7 @@ public class Main {
         EstudianteRepository repository=new EstudianteRepositoryJson();
 
         //aplicacion
-        EstudianteService service=new EstudianteService(repository);
+        EstudianteUseCase service=new EstudianteService(repository);
 
         // presentacion
         EstudianteUI estudianteUI=new EstudianteUI(service);

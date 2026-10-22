@@ -1,6 +1,6 @@
 package com.academico.presentation;
 import com.academico.domain.model.Estudiante;
-import com.academico.application.EstudianteService;
+import com.academico.application.port.in.EstudianteUseCase;
 
 import  java.util.Scanner;
 
@@ -10,9 +10,9 @@ public class EstudianteUI {
     //private static final EstudianteService service = new EstudianteService();
     //agregar
 
-    private final EstudianteService service;
+    private final EstudianteUseCase service;
 
-    public EstudianteUI(EstudianteService service){
+    public EstudianteUI(EstudianteUseCase service){
         this.service=service;
     }
     // La UI tampoco crea sus dependencias.
@@ -62,9 +62,13 @@ public class EstudianteUI {
 
         Estudiante estudiante =
                 new Estudiante(id, nombre, correo);
-        service.registrar(estudiante);
+        boolean registrado = service.registrar(estudiante);
 
-        System.out.println("Estudiante registrado.");
+        System.out.println(
+                registrado
+                        ? "Estudiante registrado."
+                        : "El ID ya está registrado."
+        );
 
     }
     private void listar(){

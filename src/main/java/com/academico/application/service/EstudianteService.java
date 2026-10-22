@@ -1,11 +1,12 @@
-package com.academico.application;
+package com.academico.application.service;
+import com.academico.application.port.in.EstudianteUseCase;
 import com.academico.domain.model.Estudiante;
 //import com.academico.infrastructure.persistence.EstudianteRepositoryJson;
 import com.academico.domain.repository.EstudianteRepository;
 
 
 import java.util.List;
-public class EstudianteService {
+public class EstudianteService implements EstudianteUseCase {
     private final EstudianteRepository repository;
 
     public EstudianteService(EstudianteRepository repository){
@@ -15,18 +16,26 @@ public class EstudianteService {
     //Esto se llama inyección de dependencias.
 
 
-    public void registrar (Estudiante estudiante){
+    @Override
+    public boolean registrar (Estudiante estudiante){
         List<Estudiante> estudiantes = repository.listar();
+        boolean existe = estudiantes.stream()
+                .anyMatch(e -> e.getId() == estudiante.getId());
+        if(existe){
+            return false;
+        }
         estudiantes.add(estudiante);
         repository.guardar(estudiantes);
-
+        return true;
     }
 
+    @Override
     public List<Estudiante> listar(){
         return repository.listar();
     }
 
-    public Boolean  actualizar(Estudiante estudiante){
+    @Override
+    public boolean actualizar(Estudiante estudiante){
         List<Estudiante> estudiantes=repository.listar();
         for (Estudiante e: estudiantes){
             if(e.getId()== estudiante.getId()){
@@ -39,6 +48,7 @@ public class EstudianteService {
         return false;
     }
 
+    @Override
     public boolean eliminar (int id){
         List<Estudiante> estudiantes=repository.listar();
         boolean eliminado= estudiantes.removeIf(e-> e.getId()==id);
