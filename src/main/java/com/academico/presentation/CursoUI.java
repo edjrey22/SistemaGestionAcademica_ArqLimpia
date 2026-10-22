@@ -1,15 +1,15 @@
 package com.academico.presentation;
 
 import com.academico.domain.model.Curso;
-import com.academico.application.CursoService;
+import com.academico.application.port.in.CursoUseCase;
 
 import java.util.Scanner;
 
 public class CursoUI {
 
-    private final CursoService service;
+    private final CursoUseCase service;
 
-    public CursoUI(CursoService service) {
+    public CursoUI(CursoUseCase service) {
         this.service = service;
     }
 
@@ -33,21 +33,15 @@ public class CursoUI {
             switch (opcion) {
 
                 case 1:
-                    System.out.print("ID: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();
-
-                    System.out.print("Nombre: ");
-                    String nombre = sc.nextLine();
-
-                    System.out.print("Créditos: ");
-                    int creditos = sc.nextInt();
-
-                    service.registrar(
+                    boolean registrado = service.registrar(
                             new Curso(id, nombre, creditos)
                     );
 
-                    System.out.println("Curso registrado.");
+                    System.out.println(
+                            registrado
+                                    ? "Curso registrado."
+                                    : "El ID ya está registrado."
+                    );
                     break;
 
                 case 2:

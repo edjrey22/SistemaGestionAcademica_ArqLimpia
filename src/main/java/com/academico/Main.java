@@ -10,6 +10,7 @@ import com.academico.application.CursoService;
 import com.academico.domain.repository.CursoRepository;
 import com.academico.domain.repository.EstudianteRepository;
 import com.academico.infrastructure.persistence.CursoRepositoryJson;
+import com.academico.application.port.in.CursoUseCase;
 
 import  java.util.Scanner;
 
@@ -28,7 +29,7 @@ public class Main {
         EstudianteUI estudianteUI=new EstudianteUI(service);
 
         CursoRepository cursoRepository = new CursoRepositoryJson();
-        CursoService cursoService = new CursoService(cursoRepository);
+        CursoUseCase cursoService = new CursoService(cursoRepository);
         CursoUI cursoUI = new CursoUI(cursoService);
 
 
