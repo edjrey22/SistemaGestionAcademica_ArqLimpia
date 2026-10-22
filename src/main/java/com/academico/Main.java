@@ -58,16 +58,14 @@ public class Main {
                     cursoUI.mostrarMenu(sc);
                     break;
 
-                case 0:
-                    System.out.println("Sistema finalizado.");
-                    break;
+                ase 0:
+                System.out.println("Regresando...");
+                break;
 
                 default:
                     System.out.println("Opción no válida.");
             }
-
-        } while (opcion != 0);
-
-        sc.close();
-    }
-}
+        } catch (IllegalStateException e) {
+            // Errores del adaptador de salida (por ejemplo, la base de datos)
+            System.out.println("Error: " + e.getMessage());
+        }
