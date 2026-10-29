@@ -1,35 +1,32 @@
 package com.academico;
-
-import com.academico.application.port.in.EstudianteUseCase;
 import com.academico.application.port.in.CursoUseCase;
 import com.academico.application.service.CursoService;
-import com.academico.application.service.EstudianteService;
 import com.academico.domain.repository.CursoRepository;
-import com.academico.domain.repository.EstudianteRepository;
-import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryPostgres;
-import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
+import com.academico.infrastructure.adapter.in.RepositoryFactory;
 import com.academico.presentation.CursoUI;
 import com.academico.presentation.EstudianteUI;
 
-import java.util.Scanner;
+import com.academico.application.service.EstudianteService;
+import com.academico.domain.repository.EstudianteRepository;
+
+import  java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        //agregar
-        // infraestructura: basta cambiar esta línea para elegir el adaptador
-        // EstudianteRepository repository=new EstudianteRepositoryJson();
-        EstudianteRepository repository=new EstudianteRepositoryPostgres();
 
-        //aplicacion
-        EstudianteUseCase service=new EstudianteService(repository);
+        // 1. Adaptadores de salida: los decide la fábrica (JSON o PostgreSQL)
+        EstudianteRepository repository=RepositoryFactory.crearEstudianteRepository();
+        CursoRepository cursoRepository=RepositoryFactory.crearCursoRepository();
+
+
+        //2. Nucleo de la aplicacion: casos de uso
+        EstudianteService service=new EstudianteService(repository);
+        CursoUseCase cursoService=new CursoService(cursoRepository);
 
         // presentacion
         EstudianteUI estudianteUI=new EstudianteUI(service);
-
-        CursoRepository cursoRepository = new CursoRepositoryPostgres();
-        CursoUseCase cursoService = new CursoService(cursoRepository);
-        CursoUI cursoUI = new CursoUI(cursoService);
+        CursoUI cursoUI=new CursoUI(cursoService);
 
 
         Scanner sc = new Scanner(System.in);
@@ -58,16 +55,19 @@ public class Main {
                         break;
 
                     case 0:
-                        System.out.println("Saliendo...");
+                        System.out.println("Sistema finalizado.");
                         break;
 
                     default:
                         System.out.println("Opción no válida.");
                 }
+
             } while (opcion != 0);
         } catch (IllegalStateException e) {
             // Errores del adaptador de salida (por ejemplo, la base de datos)
             System.out.println("Error: " + e.getMessage());
         }
+
+        sc.close();
     }
 }

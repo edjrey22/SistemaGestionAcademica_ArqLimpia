@@ -20,8 +20,9 @@ SELECT id, nombre, correo
 FROM estudiantes
 ORDER BY id;
 
+-- Tabla de cursos
 CREATE TABLE IF NOT EXISTS cursos (
-                                      id        INTEGER PRIMARY KEY,
-                                      nombre    VARCHAR(120) NOT NULL,
+    id        INTEGER PRIMARY KEY,
+    nombre    VARCHAR(120) NOT NULL,
     creditos  INTEGER NOT NULL CHECK (creditos > 0)
-    );
+);

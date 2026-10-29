@@ -3,18 +3,10 @@ package com.academico.infrastructure.adapter.out.persistence;
 import com.academico.domain.model.Estudiante;
 import com.academico.domain.repository.EstudianteRepository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-public class EstudianteRepositoryPostgres
-        implements EstudianteRepository {
+public class EstudianteRepositoryPostgres implements EstudianteRepository {
 
     private final String url;
     private final String usuario;
@@ -22,18 +14,17 @@ public class EstudianteRepositoryPostgres
 
     public EstudianteRepositoryPostgres() {
         this(
-            System.getenv().getOrDefault(
-                "DB_URL",
-                "jdbc:postgresql://localhost:5432/gestion_academica"
-            ),
-            System.getenv().getOrDefault("DB_USER", "postgres"),
-            System.getenv().get("DB_PASSWORD")
+                System.getenv().getOrDefault(
+                        "DB_URL",
+                        "jdbc:postgresql://localhost:5432/gestion_academica"
+                ),
+                System.getenv().getOrDefault("DB_USER", "postgres"),
+                System.getenv().get("DB_PASSWORD")
         );
     }
 
     // Constructor adicional para configurar o probar la conexión.
-    public EstudianteRepositoryPostgres(
-            String url, String usuario, String password) {
+    public EstudianteRepositoryPostgres(String url, String usuario, String password) {
         this.url = url;
         this.usuario = usuario;
         this.password = password;
@@ -42,14 +33,15 @@ public class EstudianteRepositoryPostgres
     private Connection conectar() throws SQLException {
         if (password == null || password.isBlank()) {
             throw new IllegalStateException(
-                "Configura la variable de entorno DB_PASSWORD."
+                    "Configura la variable de entorno DB_PASSWORD."
             );
         }
 
         return DriverManager.getConnection(
-            url, usuario, password
+                url, usuario, password
         );
     }
+
 
     @Override
     public void guardar(Estudiante estudiante) {
@@ -69,7 +61,7 @@ public class EstudianteRepositoryPostgres
 
         } catch (SQLException e) {
             throw new IllegalStateException(
-                "No se pudo registrar al estudiante.", e
+                    "No se pudo registrar al estudiante.", e
             );
         }
     }
@@ -90,9 +82,9 @@ public class EstudianteRepositoryPostgres
 
             while (rs.next()) {
                 estudiantes.add(new Estudiante(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("correo")
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("correo")
                 ));
             }
 
@@ -100,7 +92,7 @@ public class EstudianteRepositoryPostgres
 
         } catch (SQLException e) {
             throw new IllegalStateException(
-                "No se pudieron listar los estudiantes.", e
+                    "No se pudieron listar los estudiantes.", e
             );
         }
     }
@@ -121,9 +113,9 @@ public class EstudianteRepositoryPostgres
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(new Estudiante(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("correo")
+                            rs.getInt("id"),
+                            rs.getString("nombre"),
+                            rs.getString("correo")
                     ));
                 }
 
@@ -132,7 +124,7 @@ public class EstudianteRepositoryPostgres
 
         } catch (SQLException e) {
             throw new IllegalStateException(
-                "No se pudo buscar al estudiante.", e
+                    "No se pudo buscar al estudiante.", e
             );
         }
     }
@@ -156,7 +148,7 @@ public class EstudianteRepositoryPostgres
 
         } catch (SQLException e) {
             throw new IllegalStateException(
-                "No se pudo actualizar al estudiante.", e
+                    "No se pudo actualizar al estudiante.", e
             );
         }
     }
@@ -174,8 +166,11 @@ public class EstudianteRepositoryPostgres
 
         } catch (SQLException e) {
             throw new IllegalStateException(
-                "No se pudo eliminar al estudiante.", e
+                    "No se pudo eliminar al estudiante.", e
             );
         }
     }
+
+
+
 }

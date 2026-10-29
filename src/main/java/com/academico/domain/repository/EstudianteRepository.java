@@ -3,7 +3,7 @@ package com.academico.domain.repository;
 import com.academico.domain.model.Estudiante;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface EstudianteRepository {
 
@@ -16,4 +16,8 @@ public interface EstudianteRepository {
     boolean actualizar(Estudiante estudiante);
 
     boolean eliminar(int id);
+
+
+
+
 }

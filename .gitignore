@@ -37,3 +37,6 @@ build/
 
 ### Claude Code (configuración local) ###
 .claude/settings.local.json
+
+### Informe del laboratorio (no se versiona) ###
+docs/

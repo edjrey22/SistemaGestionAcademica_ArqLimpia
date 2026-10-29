@@ -1,21 +1,19 @@
 package com.academico.presentation;
-import com.academico.domain.model.Estudiante;
 import com.academico.application.port.in.EstudianteUseCase;
+import com.academico.domain.model.Estudiante;
+import com.academico.application.service.EstudianteService;
 
 import  java.util.Scanner;
 
 
 public class EstudianteUI {
 
-    //private static final EstudianteService service = new EstudianteService();
-    //agregar
-
     private final EstudianteUseCase service;
 
     public EstudianteUI(EstudianteUseCase service){
+        //
         this.service=service;
     }
-    // La UI tampoco crea sus dependencias.
 
 
     // public static void mostrarMenu(Scanner sc) {
@@ -45,8 +43,8 @@ public class EstudianteUI {
                     default ->
                             System.out.println("Opción no válida.");
                 }
-            } catch (IllegalStateException e) {
-                // Errores del adaptador de salida (por ejemplo, la base de datos)
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                // Errores de los adaptadores de salida (JSON o PostgreSQL)
                 System.out.println("Error: " + e.getMessage());
             }
         } while (opcion != 0);
@@ -67,13 +65,9 @@ public class EstudianteUI {
 
         Estudiante estudiante =
                 new Estudiante(id, nombre, correo);
-        boolean registrado = service.registrar(estudiante);
+        service.registrar(estudiante);
 
-        System.out.println(
-                registrado
-                        ? "Estudiante registrado."
-                        : "El ID ya está registrado."
-        );
+        System.out.println("Estudiante registrado.");
 
     }
     private void listar(){
