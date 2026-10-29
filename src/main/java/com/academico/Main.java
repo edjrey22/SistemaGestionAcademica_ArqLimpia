@@ -1,7 +1,8 @@
 package com.academico;
-import com.academico.application.port.in.CursoUseCase;
+import com.academico.application.event.AcademicoObserver;
 import com.academico.application.service.CursoService;
 import com.academico.domain.repository.CursoRepository;
+import com.academico.infrastructure.adapter.out.audit.AuditoriaObserver;
 import com.academico.infrastructure.config.ConfiguracionApp;
 import com.academico.infrastructure.factory.CursoRepositoryCreator;
 import com.academico.infrastructure.factory.EstudianteRepositoryCreator;
@@ -9,6 +10,7 @@ import com.academico.infrastructure.factory.JsonCursoRepositoryCreator;
 import com.academico.infrastructure.factory.JsonEstudianteRepositoryCreator;
 import com.academico.infrastructure.factory.PostgresCursoRepositoryCreator;
 import com.academico.infrastructure.factory.PostgresEstudianteRepositoryCreator;
+import com.academico.presentation.ConsolaObserver;
 import com.academico.presentation.CursoUI;
 import com.academico.presentation.EstudianteUI;
 
@@ -46,7 +48,15 @@ public class Main {
 
         //3. Nucleo de la aplicacion: casos de uso
         EstudianteService service=new EstudianteService(repository);
-        CursoUseCase cursoService=new CursoService(cursoRepository);
+        CursoService cursoService=new CursoService(cursoRepository);
+
+        // 4. Observer: los mismos observadores escuchan a ambos servicios
+        AcademicoObserver consola=new ConsolaObserver();
+        AcademicoObserver auditoria=new AuditoriaObserver();
+        service.suscribir(consola);
+        service.suscribir(auditoria);
+        cursoService.suscribir(consola);
+        cursoService.suscribir(auditoria);
 
         // presentacion
         EstudianteUI estudianteUI=new EstudianteUI(service);

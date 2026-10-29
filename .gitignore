@@ -40,3 +40,6 @@ build/
 
 ### Informe del laboratorio (no se versiona) ###
 docs/
+
+### Bitácora generada por AuditoriaObserver ###
+data/auditoria.log
