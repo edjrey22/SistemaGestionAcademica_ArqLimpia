@@ -2,7 +2,12 @@ package com.academico;
 import com.academico.application.port.in.CursoUseCase;
 import com.academico.application.service.CursoService;
 import com.academico.domain.repository.CursoRepository;
-import com.academico.infrastructure.adapter.in.RepositoryFactory;
+import com.academico.infrastructure.factory.CursoRepositoryCreator;
+import com.academico.infrastructure.factory.EstudianteRepositoryCreator;
+import com.academico.infrastructure.factory.JsonCursoRepositoryCreator;
+import com.academico.infrastructure.factory.JsonEstudianteRepositoryCreator;
+import com.academico.infrastructure.factory.PostgresCursoRepositoryCreator;
+import com.academico.infrastructure.factory.PostgresEstudianteRepositoryCreator;
 import com.academico.presentation.CursoUI;
 import com.academico.presentation.EstudianteUI;
 
@@ -15,9 +20,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // 1. Adaptadores de salida: los decide la fábrica (JSON o PostgreSQL)
-        EstudianteRepository repository=RepositoryFactory.crearEstudianteRepository();
-        CursoRepository cursoRepository=RepositoryFactory.crearCursoRepository();
+        // 1. Factory Method: se elige el creador y él decide el repositorio concreto
+        String tipo=System.getenv().getOrDefault("STORAGE_TYPE", "JSON").trim().toUpperCase();
+        EstudianteRepositoryCreator creadorEstudiantes;
+        CursoRepositoryCreator creadorCursos;
+        switch (tipo) {
+            case "JSON" -> {
+                creadorEstudiantes=new JsonEstudianteRepositoryCreator();
+                creadorCursos=new JsonCursoRepositoryCreator();
+            }
+            case "POSTGRESQL" -> {
+                creadorEstudiantes=new PostgresEstudianteRepositoryCreator();
+                creadorCursos=new PostgresCursoRepositoryCreator();
+            }
+            default -> throw new IllegalArgumentException(
+                    "Tipo de almacenamiento no soportado: " + tipo);
+        }
+        EstudianteRepository repository=creadorEstudiantes.prepararRepositorio();
+        CursoRepository cursoRepository=creadorCursos.prepararRepositorio();
 
 
         //2. Nucleo de la aplicacion: casos de uso
