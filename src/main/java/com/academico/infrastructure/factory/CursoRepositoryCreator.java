@@ -2,6 +2,7 @@ package com.academico.infrastructure.factory;
 
 import com.academico.domain.repository.CursoRepository;
 import com.academico.infrastructure.adapter.out.persistence.decorator.CursoRepositoryLog;
+import com.academico.infrastructure.adapter.out.persistence.proxy.CursoRepositoryCacheProxy;
 
 /**
  * Factory Method: el creador define el flujo para preparar el repositorio
@@ -14,8 +15,9 @@ public abstract class CursoRepositoryCreator {
         CursoRepository repositorio = crearRepositorio();
         System.out.println("[FACTORY METHOD] " + getClass().getSimpleName()
                 + " creó " + repositorio.getClass().getSimpleName());
-        // Decorator: se añade el registro de operaciones sin tocar el adaptador
-        return new CursoRepositoryLog(repositorio);
+        // Proxy (caché) y Decorator (log) envuelven al adaptador: Log(Proxy(real))
+        return new CursoRepositoryLog(
+                new CursoRepositoryCacheProxy(repositorio));
     }
 
     // Método fábrica: lo implementa cada creador concreto
