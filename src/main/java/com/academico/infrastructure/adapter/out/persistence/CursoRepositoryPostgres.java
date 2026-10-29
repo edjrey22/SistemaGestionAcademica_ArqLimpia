@@ -2,6 +2,7 @@ package com.academico.infrastructure.adapter.out.persistence;
 
 import com.academico.domain.model.Curso;
 import com.academico.domain.repository.CursoRepository;
+import com.academico.infrastructure.config.ConfiguracionApp;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,14 +21,12 @@ public class CursoRepositoryPostgres
     private final String usuario;
     private final String password;
 
+    // Singleton: la conexión se configura desde ConfiguracionApp
     public CursoRepositoryPostgres() {
         this(
-                System.getenv().getOrDefault(
-                        "DB_URL",
-                        "jdbc:postgresql://localhost:5432/gestion_academica"
-                ),
-                System.getenv().getOrDefault("DB_USER", "postgres"),
-                System.getenv().get("DB_PASSWORD")
+                ConfiguracionApp.getInstancia().getDbUrl(),
+                ConfiguracionApp.getInstancia().getDbUsuario(),
+                ConfiguracionApp.getInstancia().getDbPassword()
         );
     }
 

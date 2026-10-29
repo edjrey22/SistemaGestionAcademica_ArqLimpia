@@ -2,6 +2,7 @@ package com.academico;
 import com.academico.application.port.in.CursoUseCase;
 import com.academico.application.service.CursoService;
 import com.academico.domain.repository.CursoRepository;
+import com.academico.infrastructure.config.ConfiguracionApp;
 import com.academico.infrastructure.factory.CursoRepositoryCreator;
 import com.academico.infrastructure.factory.EstudianteRepositoryCreator;
 import com.academico.infrastructure.factory.JsonCursoRepositoryCreator;
@@ -20,8 +21,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // 1. Factory Method: se elige el creador y él decide el repositorio concreto
-        String tipo=System.getenv().getOrDefault("STORAGE_TYPE", "JSON").trim().toUpperCase();
+        // 1. Singleton: configuración compartida por toda la aplicación
+        ConfiguracionApp config=ConfiguracionApp.getInstancia();
+
+        // 2. Factory Method: se elige el creador y él decide el repositorio concreto
+        String tipo=config.getTipoAlmacenamiento();
         EstudianteRepositoryCreator creadorEstudiantes;
         CursoRepositoryCreator creadorCursos;
         switch (tipo) {
@@ -40,7 +44,7 @@ public class Main {
         CursoRepository cursoRepository=creadorCursos.prepararRepositorio();
 
 
-        //2. Nucleo de la aplicacion: casos de uso
+        //3. Nucleo de la aplicacion: casos de uso
         EstudianteService service=new EstudianteService(repository);
         CursoUseCase cursoService=new CursoService(cursoRepository);
 

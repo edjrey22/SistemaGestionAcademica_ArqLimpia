@@ -2,6 +2,7 @@ package com.academico.infrastructure.adapter.out.persistence;
 
 import com.academico.domain.model.Estudiante;
 import com.academico.domain.repository.EstudianteRepository;
+import com.academico.infrastructure.config.ConfiguracionApp;
 
 import java.sql.*;
 import java.util.*;
@@ -12,14 +13,12 @@ public class EstudianteRepositoryPostgres implements EstudianteRepository {
     private final String usuario;
     private final String password;
 
+    // Singleton: la conexión se configura desde ConfiguracionApp
     public EstudianteRepositoryPostgres() {
         this(
-                System.getenv().getOrDefault(
-                        "DB_URL",
-                        "jdbc:postgresql://localhost:5432/gestion_academica"
-                ),
-                System.getenv().getOrDefault("DB_USER", "postgres"),
-                System.getenv().get("DB_PASSWORD")
+                ConfiguracionApp.getInstancia().getDbUrl(),
+                ConfiguracionApp.getInstancia().getDbUsuario(),
+                ConfiguracionApp.getInstancia().getDbPassword()
         );
     }
 
