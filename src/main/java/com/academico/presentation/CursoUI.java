@@ -30,79 +30,91 @@ public class CursoUI {
             opcion = sc.nextInt();
             sc.nextLine();
 
-            switch (opcion) {
+            try {
+                switch (opcion) {
 
-                case 1:
-                    System.out.print("ID: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();
+                    case 1:
+                        System.out.print("ID: ");
+                        int id = sc.nextInt();
+                        sc.nextLine();
 
-                    System.out.print("Nombre: ");
-                    String nombre = sc.nextLine();
+                        System.out.print("Nombre: ");
+                        String nombre = sc.nextLine();
 
-                    System.out.print("Créditos: ");
-                    int creditos = sc.nextInt();
+                        System.out.print("Créditos: ");
+                        int creditos = sc.nextInt();
 
-                    boolean registrado = service.registrar(
-                            new Curso(id, nombre, creditos)
-                    );
+                        boolean registrado = service.registrar(
+                                new Curso(id, nombre, creditos)
+                        );
 
-                    System.out.println(
-                            registrado
-                                    ? "Curso registrado."
-                                    : "El ID ya está registrado."
-                    );
-                    break;
+                        System.out.println(
+                                registrado
+                                        ? "Curso registrado."
+                                        : "El ID ya está registrado."
+                        );
+                        break;
 
-                case 2:
-                    service.listar().forEach(c ->
-                            System.out.println(
-                                    c.getId() + " - " +
-                                            c.getNombre() + " - " +
-                                            c.getCreditos() + " créditos"
-                            )
-                    );
-                    break;
+                    case 2:
+                        service.listar().forEach(c ->
+                                System.out.println(
+                                        c.getId() + " - " +
+                                                c.getNombre() + " - " +
+                                                c.getCreditos() + " créditos"
+                                )
+                        );
+                        break;
 
-                case 3:
-                    System.out.print("ID del curso: ");
-                    int idAct = sc.nextInt();
-                    sc.nextLine();
+                    case 3:
+                        System.out.print("ID del curso: ");
+                        int idAct = sc.nextInt();
+                        sc.nextLine();
 
-                    System.out.print("Nuevo nombre: ");
-                    String nombreAct = sc.nextLine();
+                        System.out.print("Nuevo nombre: ");
+                        String nombreAct = sc.nextLine();
 
-                    System.out.print("Nuevos créditos: ");
-                    int creditosAct = sc.nextInt();
+                        System.out.print("Nuevos créditos: ");
+                        int creditosAct = sc.nextInt();
 
-                    boolean actualizado = service.actualizar(
-                            new Curso(
-                                    idAct,
-                                    nombreAct,
-                                    creditosAct
-                            )
-                    );
+                        boolean actualizado = service.actualizar(
+                                new Curso(
+                                        idAct,
+                                        nombreAct,
+                                        creditosAct
+                                )
+                        );
 
-                    System.out.println(
-                            actualizado
-                                    ? "Curso actualizado."
-                                    : "Curso no encontrado."
-                    );
-                    break;
+                        System.out.println(
+                                actualizado
+                                        ? "Curso actualizado."
+                                        : "Curso no encontrado."
+                        );
+                        break;
 
-                case 4:
-                    System.out.print("ID a eliminar: ");
-                    int idEliminar = sc.nextInt();
+                    case 4:
+                        System.out.print("ID a eliminar: ");
+                        int idEliminar = sc.nextInt();
 
-                    boolean eliminado =
-                            service.eliminar(idEliminar);
+                        boolean eliminado =
+                                service.eliminar(idEliminar);
 
-                    System.out.println(
-                            eliminado
-                                    ? "Curso eliminado."
-                                    : "Curso no encontrado."
-                    );
-                    break;
+                        System.out.println(
+                                eliminado
+                                        ? "Curso eliminado."
+                                        : "Curso no encontrado."
+                        );
+                        break;
+
+                    case 0:
+                        System.out.println("Regresando...");
+                        break;
+
+                    default:
+                        System.out.println("Opción no válida.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                // Errores de validación (Chain) o de los adaptadores de salida
+                System.out.println("Error: " + e.getMessage());
             }
 
         } while (opcion != 0);
