@@ -24,18 +24,10 @@ public class EstudianteRepositoryJson implements EstudianteRepository {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final Type tipoLista =  new TypeToken<List<Estudiante>>() {}.getType();
 
+    // El control de ID duplicado lo hace la cadena de validación (aplicación)
     @Override
     public void guardar(Estudiante estudiante) {
         List<Estudiante> estudiantes = leerArchivo();
-
-        boolean existe = estudiantes.stream()
-                .anyMatch(e -> e.getId() == estudiante.getId());
-
-        if (existe) {
-            throw new IllegalArgumentException(
-                    "Ya existe un estudiante con ese ID.");
-        }
-
         estudiantes.add(estudiante);
         escribirArchivo(estudiantes);
     }
